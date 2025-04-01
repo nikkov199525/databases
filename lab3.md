@@ -24,7 +24,7 @@
 
 @startuml
 entity "Specialties" as specialties {
-  + specialty_id : SERIAL <<PK>>
+  + specialty_id : VARCHAR(50) <<PK>>
   + specialty_name : VARCHAR(100)
 }
 
@@ -76,26 +76,75 @@ appointment_id → med_card_id, doctor_id, appointment_date, diagnos, treatment
 
 
 
+## Обеспечение целостности данных
+Для обеспечения целостности данных в запрос, создающий таблицы, были внесены некоторые изменения. Обновленный запрос приводится ниже.
+
+CREATE TABLE Specialties (
+    specialty_id VARCHAR(50) PRIMARY KEY CHECK (specialty_id ~ '^[A-Za-z0-9_]+$'),
+    specialty_name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Doctors (
+    doctor_id SERIAL PRIMARY KEY,
+    surname VARCHAR(100) NOT NULL,
+    firstname VARCHAR(100) NOT NULL,
+    middlename VARCHAR(100) NOT NULL,
+    cabinet_number INT NOT NULL,
+    specialty_id VARCHAR(50) NOT NULL, 
+    FOREIGN KEY (specialty_id) REFERENCES Specialties(specialty_id)
+);
+
+CREATE TABLE Patients (
+    med_card_id SERIAL PRIMARY KEY,
+    surname VARCHAR(50) NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    middle_name VARCHAR(50) NOT NULL,
+    address VARCHAR(150) NOT NULL,
+    phone VARCHAR(12),
+    workplace VARCHAR(200)
+);
+
+CREATE TABLE Appointments (
+    appointment_id SERIAL PRIMARY KEY,
+    med_card_id INT NOT NULL,
+    doctor_id INT NOT NULL,
+    appointment_date DATE NOT NULL,
+    diagnos VARCHAR(150) NOT NULL,
+    treatment TEXT,
+    FOREIGN KEY (med_card_id) REFERENCES Patients(med_card_id),
+    FOREIGN KEY (doctor_id) REFERENCES Doctors(doctor_id)
+);
+
+
+
+
+
 
 ## Примеры заполнения данных каждой таблицы
 
-Заполнение таблицы Specialties
-INSERT INTO Specialties (specialty_name) VALUES ('Терапевт'), ('Уролог'), ('Гинеколог');
+### Заполнение таблицы Specialties
+INSERT INTO Specialties (specialty_id, specialty_name) VALUES
+('terapeft', 'Терапевт'),
+('urolog', 'Уролог'),
+('gynecolog', 'Гинеколог'),
+('herurg', 'Хирург');
 
-Заполнение таблицы Doctors
-INSERT INTO Doctors (surname, firstname, middlename, cabinet_number, specialty_id) 
-VALUES ('Власов', 'Герман', 'Иванович', 201, 1), 
-       ('Крестовский', 'Петр', 'Сергеевич', 204, 2);
 
-Заполнение таблицы Patients
+### Заполнение таблицы Doctors
+
+INSERT INTO Doctors (surname, firstname, middlename, cabinet_number, specialty_id) VALUES                                                        
+('Власов', 'Герман', 'Иванович', 201, 'terapeft'),                                 
+('Крестовский', 'Петр', 'Сергеевич', 204, 'herurg');
+
+### Заполнение таблицы Patients
 INSERT INTO Patients (surname, name, middle_name) 
 VALUES ('Капранов', 'Дмитрий', 'Евгеньевич');
 
-Заполнение таблицы PatientContact
+### Заполнение таблицы PatientContact
 INSERT INTO PatientContact (med_card_id, address, phone, workplace) 
 VALUES (1, 'Санкт-Петербург, ул. Пушкина, д. 6', '+79244789631', 'АО Яндекс');
 
-Заполнение таблицы Appointments
+### Заполнение таблицы Appointments
 INSERT INTO Appointments (med_card_id, doctor_id, appointment_date, diagnos, treatment) 
 VALUES (1, 1, '2025-01-20', 'Кашель', 'Противовирусные препараты');
 
