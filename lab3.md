@@ -137,12 +137,9 @@ INSERT INTO Doctors (surname, firstname, middlename, cabinet_number, specialty_i
 ('Крестовский', 'Петр', 'Сергеевич', 204, 'herurg');
 
 ### Заполнение таблицы Patients
-INSERT INTO Patients (surname, name, middle_name) 
-VALUES ('Капранов', 'Дмитрий', 'Евгеньевич');
+INSERT INTO Patients (surname, name, middle_name,address, phone, workplace)
+VALUES ('Капранов', 'Дмитрий', 'Евгеньевич', 1, 'Санкт-Петербург, ул. Пушкина, д. 6', '+79244789631', 'АО Яндекс');
 
-### Заполнение таблицы PatientContact
-INSERT INTO PatientContact (med_card_id, address, phone, workplace) 
-VALUES (1, 'Санкт-Петербург, ул. Пушкина, д. 6', '+79244789631', 'АО Яндекс');
 
 ### Заполнение таблицы Appointments
 INSERT INTO Appointments (med_card_id, doctor_id, appointment_date, diagnos, treatment) 
