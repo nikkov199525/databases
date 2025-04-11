@@ -42,7 +42,7 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
+#### Триггер
 CREATE TRIGGER trg_prevent_duplicate_patients
 BEFORE INSERT ON Patients
 FOR EACH ROW EXECUTE FUNCTION prevent_duplicate_patients();
@@ -64,7 +64,7 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
+#### Триггер
 CREATE TRIGGER trg_limit_appointments_per_time
 BEFORE INSERT ON Appointments
 FOR EACH ROW EXECUTE FUNCTION limit_appointments_per_time();
@@ -86,10 +86,10 @@ CREATE TRIGGER trg_check_appointment_date
 BEFORE INSERT ON Appointments
 FOR EACH ROW EXECUTE FUNCTION check_appointment_date();
 
-### Демонстрацияя работы транзакций
+### Демонстрация работы транзакций
 #### Добавление пациента
 BEGIN;
-INSERT INTO Patients (surname, name, middle_name, address, phone, workplace) VALUES ('Иванов', 'Сергей', 'Алексеевич', 'Москва, ул. Ленина, д. 10', '+742122456767', 'АО "Верное решение"');
+INSERT INTO Patients (surname, name, middle_name, address, phone, workplace) VALUES ('Иванов', 'Сергей', 'Алексеевич', 'Москва, ул. Ленина, д. 10', '+74212245676', 'АО "Верное решение"');
 COMMIT;
 #### Запись на прием к врачу
 BEGIN;
